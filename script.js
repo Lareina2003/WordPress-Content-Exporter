@@ -73,6 +73,25 @@ class Editor {
     getContent() {
         return this.editor.innerHTML; // Return the HTML content inside the editor
     }
+
+    insertTable(rows, cols) {
+    let tableHTML = "<table border='1' style='width: 300px; height: 150px; border-collapse: collapse; position: relative;'>";
+    for (let i = 0; i < rows; i++) {
+        tableHTML += "<tr>";
+        for (let j = 0; j < cols; j++) {
+            tableHTML += "<td style='padding: 10px; text-align: center;'></td>";
+        }
+        tableHTML += "</tr>";
+    }
+    tableHTML += "</table>";
+    this.editor.innerHTML += tableHTML;
+
+    // Make the inserted table resizable
+    const tables = this.editor.querySelectorAll('table');
+    const lastTable = tables[tables.length - 1];
+    makeTableResizable(lastTable);
+}
+
 }
 
 class Toolbar {
@@ -169,6 +188,7 @@ class Toolbar {
         this.showStatus('Paste not supported in this browser.');
     }
 }
+
 
 
      toggleDarkMode() {
@@ -346,8 +366,12 @@ handleEditorClick() {
     insertTable() {
         const rows = prompt("Enter number of rows:");
         const cols = prompt("Enter number of columns:");
-        this.editor.insertTable(rows, cols);
+        if (rows && cols) {
+        this.editor.insertTable(parseInt(rows), parseInt(cols));
     }
+}
+   
+
 
     // Method to copy the content of the editor
     copyText() {
@@ -405,6 +429,49 @@ class Exporter {
         });
         doc.save("document.pdf");
     }
+}
+
+function makeTableResizable(table) {
+    const handle = document.createElement('div');
+    handle.style.position = 'absolute';
+    handle.style.width = '12px';
+    handle.style.height = '12px';
+    handle.style.right = '2px';
+    handle.style.bottom = '2px';
+    handle.style.cursor = 'se-resize';
+    handle.style.background = 'rgba(0,0,0,0.5)';
+
+    // The table wrapper should be relative so that the handle can be positioned
+    table.style.position = 'relative';
+
+    table.appendChild(handle);
+
+    let isResizing = false;
+
+    handle.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        e.preventDefault();
+        document.body.style.userSelect = 'none'; // prevent text selection while dragging
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isResizing) return;
+        // Calculate new width/height based on mouse location
+        const rect = table.getBoundingClientRect();
+        const newWidth = e.clientX - rect.left;
+        const newHeight = e.clientY - rect.top;
+
+        if (newWidth > 50) table.style.width = newWidth + 'px';
+        if (newHeight > 30) table.style.height = newHeight + 'px';
+    });
+
+    document.addEventListener('mouseup', (e) => {
+        if (isResizing) {
+            isResizing = false;
+            document.body.style.userSelect = ''; // restore
+        }
+    });
+
 }
 
 // Initialize everything
