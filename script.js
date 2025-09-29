@@ -44,11 +44,60 @@ class Editor {
 
     // Method to insert an image into the editor
     insertImage(url) {
-        if (url) {
-            const img = `<img src="${url}" alt="Image" style="max-width: 100%;">`;
-            this.editor.innerHTML += img;
-        }
+    if (url) {
+        const container = document.createElement('div');
+        container.contentEditable = false; // Prevent interfering with editing
+        container.style.position = 'relative';
+        container.style.display = 'inline-block';
+        container.style.margin = '10px';
+
+        const img = document.createElement('img');
+        img.src = url;
+        img.style.maxWidth = '100%';
+        img.style.height = 'auto';
+        img.style.width = '200px'; // default width
+        img.style.display = 'block';
+
+        const resizeHandle = document.createElement('div');
+        resizeHandle.style.width = '12px';
+        resizeHandle.style.height = '12px';
+        resizeHandle.style.background = 'rgba(0, 0, 0, 0.5)';
+        resizeHandle.style.position = 'absolute';
+        resizeHandle.style.right = '0';
+        resizeHandle.style.bottom = '0';
+        resizeHandle.style.cursor = 'se-resize';
+
+        container.appendChild(img);
+        container.appendChild(resizeHandle);
+        this.editor.appendChild(container);
+
+        // Enable resizing
+        let isResizing = false;
+
+        resizeHandle.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            e.preventDefault();
+            document.body.style.userSelect = 'none';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            const rect = container.getBoundingClientRect();
+            const newWidth = e.clientX - rect.left;
+            if (newWidth > 50) {
+                img.style.width = newWidth + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isResizing) {
+                isResizing = false;
+                document.body.style.userSelect = '';
+            }
+        });
     }
+}
+
 
     // Method to insert a table into the editor
     insertTable(rows, cols) {
