@@ -8,28 +8,83 @@ body {
     align-items: center;
     height: 100vh;
     background-color: #f4f4f4;
+    flex-direction: column; /* Stack the editor container below the title */
 }
 
+/* Title Bar with Buttons */
+.title-bar {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between; /* Space between title and buttons */
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.title-left h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.title-right {
+    display: flex;
+    flex-wrap: wrap; /* Wrap buttons to the next line if needed */
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+/* Editor container styles */
 .editor-container {
-    width: 80%;
-    max-width: 1200px;
+    width: 842px;
     margin: 20px auto;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background: #ccc;   /* page background outside pages */
+    padding: 60px;
+    box-sizing: border-box;
+    min-height: 100vh;
+    overflow-y: auto;
 }
 
-/* Toolbar styles */
+
+/* Tooltip styling */
+.toolbar button[data-tooltip]:hover::after,
+.toolbar select[data-tooltip]:hover::after,
+.toolbar input[data-tooltip]:hover::after {
+    content: attr(data-tooltip); /* Display the tooltip text from data-tooltip */
+    position: absolute;
+    bottom: 100%; /* Place tooltip above the button */
+    left: 50%;
+    transform: translateX(-50%); /* Center the tooltip */
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 999; /* Make sure the tooltip is on top */
+    opacity: 1; /* Tooltip is fully visible */
+    visibility: visible; /* Make tooltip visible */
+    transition: opacity 0.3s ease-in-out; /* Smooth transition */
+}
+
+/* Add relative position to the button for tooltip positioning */
+.toolbar button, .toolbar select, .toolbar input {
+    position: relative; /* Necessary for absolute positioning of the tooltip */
+}
+
+/* Toolbar and button styles */
 .toolbar {
     display: flex;
-    justify-content: flex-start;
     flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 20px;
 }
 
-.toolbar button, .toolbar select, .toolbar input {
+/* Button styles */
+.toolbar button {
     padding: 10px;
     font-size: 14px;
     cursor: pointer;
@@ -39,7 +94,26 @@ body {
     transition: background-color 0.2s ease;
 }
 
-.toolbar button:hover, .toolbar select:hover, .toolbar input:hover {
+.toolbar button:hover {
+    background-color: #e0e0e0;
+}
+
+.toolbar button.selected {
+    background-color: #ddd;
+}
+
+/* Styling for select and input */
+.toolbar select, .toolbar input {
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    border: none;
+    transition: background-color 0.2s ease;
+}
+
+.toolbar select:hover, .toolbar input:hover {
     background-color: #e0e0e0;
 }
 
@@ -52,39 +126,4 @@ body {
     background-color: #fafafa;
 }
 
-/* Tooltip styling */
-button[title]:hover::after {
-    content: attr(title);
-    position: relative;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #333;
-    color: #fff;
-    padding: 5px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    white-space: nowrap;
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.3s;
-}
 
-button:focus, select:focus, input:focus {
-    outline: none;
-}
-
-button {
-    border: none;
-    background-color: #f0f0f0;
-    border-radius: 4px;
-}
-
-button:hover {
-    background-color: #e0e0e0;
-}
-
-/* Styling for the selected button */
-button.selected {
-    background-color: #ddd;
-}

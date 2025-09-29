@@ -166,7 +166,14 @@ class Exporter {
             doc.text(line, 10, y);
             y += 10;
         });
-
+        const images = this.editor.editor.querySelectorAll('img');
+        images.forEach((image, index) => {
+            const imgSrc = image.src;
+            if (imgSrc) {
+                doc.addImage(imgSrc, 'JPEG', 10, y, 50, 50); // Adjust x, y, width, height as per requirement
+                y += 60;
+            }
+        });
         doc.save("document.pdf");
     }
 }

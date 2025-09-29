@@ -9,9 +9,13 @@
 </head>
 <body>
 
-    <div class="editor-container">
-        <!-- Toolbar -->
-        <div class="toolbar">
+    <!-- Fixed Title Bar with All Toolbar Buttons -->
+    <div class="title-bar">
+        <div class="title-left">
+            <h1>WordPad-like Editor</h1>
+        </div>
+        <div class="title-right">
+            <!-- Toolbar buttons inside title bar -->
             <button id="boldBtn" class="toolbar-btn" data-tooltip="Bold"><i class="fas fa-bold"></i></button>
             <button id="italicBtn" class="toolbar-btn" data-tooltip="Italic"><i class="fas fa-italic"></i></button>
             <button id="underlineBtn" class="toolbar-btn" data-tooltip="Underline"><i class="fas fa-underline"></i></button>
@@ -44,18 +48,16 @@
             <button id="exportDocBtn" class="toolbar-btn" data-tooltip="Export as DOC">Export DOC</button>
             <button id="exportPdfBtn" class="toolbar-btn" data-tooltip="Export as PDF">Export PDF</button>
         </div>
+    </div>
 
-        <!-- Editor Area -->
+    <!-- Editor Area -->
+    <div class="editor-container">
         <div class="editor" contenteditable="true" id="editor">
             <p>Start typing here...</p>
         </div>
     </div>
 
     <script src="script.js"></script>
-   
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 </html>
