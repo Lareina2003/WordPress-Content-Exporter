@@ -36,7 +36,12 @@ class Editor {
 
     // Method to reset the editor
     resetEditor() {
-        this.editor.innerHTML = "<p>Start typing here...</p>";
+        this.editor.innerHTML = "<p>Start typing here...</p>"; // Reset editor content to placeholder
+    }
+
+    // Method to get the current content (for Copy and Preview)
+    getContent() {
+        return this.editor.innerHTML; // Return the HTML content inside the editor
     }
 }
 
@@ -88,6 +93,8 @@ class Toolbar {
         this.insertTableBtn.addEventListener('click', () => this.insertTable());
         this.clearFormattingBtn.addEventListener('click', () => this.editor.applyCommand('removeFormat'));
         this.resetBtn.addEventListener('click', () => this.editor.resetEditor());
+        this.copyTextBtn.addEventListener('click', () => this.copyText());
+        this.previewBtn.addEventListener('click', () => this.previewText());
     }
 
     // Method to insert a link into the editor
@@ -112,6 +119,24 @@ class Toolbar {
         const cols = prompt("Enter number of columns:");
         this.editor.insertTable(rows, cols);
     }
+
+    // Method to copy the content of the editor
+    copyText() {
+        const range = document.createRange();
+        range.selectNodeContents(this.editor.editor);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        document.execCommand('copy');
+        alert("Text copied to clipboard!");
+    }
+
+    // Method to preview the editor content in a new window
+    previewText() {
+        const previewWindow = window.open('', 'Preview', 'width=600,height=400');
+        previewWindow.document.write('<html><body>' + this.editor.getContent() + '</body></html>');
+        previewWindow.document.close();
+    }
 }
 
 class Exporter {
@@ -121,7 +146,7 @@ class Exporter {
 
     // Export the content as DOC
     exportDoc() {
-        const doc = new Blob([this.editor.editor.innerHTML], { type: 'application/msword' });
+        const doc = new Blob([this.editor.getContent()], { type: 'application/msword' });
         const url = URL.createObjectURL(doc);
         const link = document.createElement('a');
         link.href = url;
