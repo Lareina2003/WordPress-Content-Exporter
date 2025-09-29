@@ -100,6 +100,8 @@ class Toolbar {
         this.resetBtn = document.getElementById('resetBtn');
         this.copyTextBtn = document.getElementById('copyTextBtn');
         this.previewBtn = document.getElementById('previewBtn');
+        this.pasteTextBtn = document.getElementById('pasteTextBtn');
+
 
         this.formatPainterBtn = document.getElementById('formatPainterBtn');
         this.isFormatPainterActive = false;
@@ -133,6 +135,8 @@ class Toolbar {
         this.resetBtn.addEventListener('click', () => this.editor.resetEditor());
         this.copyTextBtn.addEventListener('click', () => this.copyText());
         this.previewBtn.addEventListener('click', () => this.previewText());
+        this.pasteTextBtn.addEventListener('click', () => this.pasteText());
+
 
         this.formatPainterBtn.addEventListener('click', () => this.toggleFormatPainter());
         document.getElementById('editor').addEventListener('mouseup', (e) => this.applyFormatPainter(e));
@@ -144,6 +148,28 @@ class Toolbar {
       document.body.classList.add('dark-mode');
     }
     }
+
+    async pasteText() {
+    // Ensure editor is focused
+    this.editor.editor.focus();
+
+    if (navigator.clipboard && navigator.clipboard.readText) {
+        try {
+            const text = await navigator.clipboard.readText();
+            if (text) {
+                document.execCommand('insertText', false, text);
+                this.showStatus('Text pasted from clipboard.');
+            } else {
+                this.showStatus('Clipboard is empty.');
+            }
+        } catch (err) {
+            this.showStatus('Failed to paste: ' + err.message);
+        }
+    } else {
+        this.showStatus('Paste not supported in this browser.');
+    }
+}
+
 
      toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
