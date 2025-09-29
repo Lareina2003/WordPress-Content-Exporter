@@ -100,6 +100,12 @@ class Toolbar {
         this.resetBtn = document.getElementById('resetBtn');
         this.copyTextBtn = document.getElementById('copyTextBtn');
         this.previewBtn = document.getElementById('previewBtn');
+
+        this.formatPainterBtn = document.getElementById('formatPainterBtn');
+        this.isFormatPainterActive = false;
+        this.copiedFormatHTML = null;
+        this.editor.editor.addEventListener('mouseup', () => this.handleEditorClick());
+
     }
 
     init() {
@@ -125,7 +131,154 @@ class Toolbar {
         this.resetBtn.addEventListener('click', () => this.editor.resetEditor());
         this.copyTextBtn.addEventListener('click', () => this.copyText());
         this.previewBtn.addEventListener('click', () => this.previewText());
+
+        this.formatPainterBtn.addEventListener('click', () => this.toggleFormatPainter());
+        document.getElementById('editor').addEventListener('mouseup', (e) => this.applyFormatPainter(e));
     }
+
+    toggleFormatPainter() {
+    if (this.isFormatPainterActive) {
+        this.isFormatPainterActive = false;
+        this.copiedStyles = null;
+        this.formatPainterBtn.classList.remove('active');
+        this.showStatus('Format painter deactivated.');
+    } else {
+        const selection = window.getSelection();
+        if (selection.rangeCount > 0 && !selection.isCollapsed) {
+            const computedStyle = this.getComputedStyleFromSelection();
+
+            if (!computedStyle) {
+                this.showStatus('Please select some formatted text first.');
+                return;
+            }
+
+            // Save only some relevant styles
+            this.copiedStyles = {
+                fontWeight: computedStyle.fontWeight,
+                fontStyle: computedStyle.fontStyle,
+                textDecoration: computedStyle.textDecorationLine,
+                fontSize: computedStyle.fontSize,
+                fontFamily: computedStyle.fontFamily,
+                color: computedStyle.color,
+                backgroundColor: computedStyle.backgroundColor,
+                textAlign: computedStyle.textAlign,
+            };
+
+            this.isFormatPainterActive = true;
+            this.formatPainterBtn.classList.add('active');
+            this.showStatus('Format copied. Select text to apply it.');
+        } else {
+            this.showStatus('Please select some formatted text first.');
+        }
+    }
+}
+getComputedStyleFromSelection() {
+    const selection = window.getSelection();
+    if (selection.rangeCount === 0) return null;
+    
+    let node = selection.focusNode;
+    if (node.nodeType === Node.TEXT_NODE) {
+        node = node.parentNode; // get the element node of the text
+    }
+    return window.getComputedStyle(node);
+}
+handleEditorClick() {
+    if (this.isFormatPainterActive && this.copiedStyles) {
+        const selection = window.getSelection();
+        if (selection.rangeCount === 0 || selection.isCollapsed) {
+            this.showStatus('Please select text to apply formatting.');
+            return;
+        }
+
+        const range = selection.getRangeAt(0);
+
+        // Wrap selected text with a span applying the saved styles
+        const span = document.createElement('span');
+
+        // Apply copied styles as inline CSS
+        for (const [prop, value] of Object.entries(this.copiedStyles)) {
+            if (value && value !== 'initial' && value !== 'none') {
+                span.style[prop] = value;
+            }
+        }
+
+        // Wrap the selected content inside the span
+        try {
+            range.surroundContents(span);
+        } catch (e) {
+            // If the range partially selects nodes, fallback:
+            document.execCommand('styleWithCSS', false, true);
+            document.execCommand('foreColor', false, this.copiedStyles.color);
+            document.execCommand('fontName', false, this.copiedStyles.fontFamily);
+            // Add more commands as needed or just wrap in span for complex cases
+        }
+
+        // Clear format painter mode after applying
+        this.isFormatPainterActive = false;
+        this.copiedStyles = null;
+        this.formatPainterBtn.classList.remove('active');
+        this.showStatus('Formatting applied.');
+    }
+}
+
+
+
+    applyFormatPainter(event) {
+        if (!this.isFormatPainterActive || !this.copiedFormatHTML) return;
+
+        const selection = window.getSelection();
+        if (selection.rangeCount === 0 || selection.isCollapsed) return;
+
+        const range = selection.getRangeAt(0);
+
+        // Get the text content of selection
+        const selectedText = range.toString();
+
+        if (selectedText.length === 0) {
+            alert('Please select text to apply formatting.');
+            return;
+        }
+
+        // Create a temporary container with copied formatting but empty content
+        const container = document.createElement('div');
+        container.innerHTML = this.copiedFormatHTML;
+
+        // Strip all text from copied formatting, leaving only the tags/styles
+        // We'll insert the selected text inside the deepest node that holds the formatting
+        // For simplicity, if multiple nodes, just wrap in a span with copied styles
+
+        // Extract styles from copiedFormatHTML
+        // Simple approach: wrap selected text in a span with the styles of first child
+
+        let style = '';
+
+        if (container.firstChild) {
+            if (container.firstChild.nodeType === Node.ELEMENT_NODE) {
+                style = container.firstChild.getAttribute('style') || '';
+                // Copy class if needed, etc.
+            }
+        }
+
+        // Create span with copied styles and selected text
+        const span = document.createElement('span');
+        if (style) span.setAttribute('style', style);
+        span.textContent = selectedText;
+
+        // Replace current selection with span
+        range.deleteContents();
+        range.insertNode(span);
+
+        // Clear format painter state
+        this.isFormatPainterActive = false;
+        this.copiedFormatHTML = null;
+        this.formatPainterBtn.classList.remove('active');
+
+        // Clear selection
+        selection.removeAllRanges();
+
+        event.preventDefault();
+    }
+
 
     // Method to insert a link into the editor
     insertLink() {

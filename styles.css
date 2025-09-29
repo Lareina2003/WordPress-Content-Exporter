@@ -127,3 +127,7 @@ body {
     line-height: 1.6;
     background-color: #fafafa;
 }
+
+.toolbar-btn.active {
+    background-color: #bbb;
+}
