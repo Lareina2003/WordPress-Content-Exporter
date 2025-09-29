@@ -55,7 +55,7 @@ body {
 /* Tooltip styling */
 button[title]:hover::after {
     content: attr(title);
-    position: absolute;
+    position: relative;
     bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
