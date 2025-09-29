@@ -3,7 +3,7 @@ class Editor {
         this.editor = document.getElementById('editor');
     }
 
-    // Method to apply a command to the editor
+    
     applyCommand(command, value = null) {
         if (value) {
             document.execCommand(command, false, value); // For commands like fontSize, fontName, color
