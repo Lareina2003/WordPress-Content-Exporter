@@ -35,6 +35,8 @@ body {
     flex-wrap: wrap; /* Wrap buttons to the next line if needed */
     gap: 10px;
     justify-content: flex-start;
+    padding-top: 25px; /* Add enough space above buttons for tooltips */
+    position: relative; 
 }
 
 /* Editor container styles */
@@ -50,9 +52,9 @@ body {
 
 
 /* Tooltip styling */
-.toolbar button[data-tooltip]:hover::after,
-.toolbar select[data-tooltip]:hover::after,
-.toolbar input[data-tooltip]:hover::after {
+.title-right button[data-tooltip]:hover::after,
+.title-right select[data-tooltip]:hover::after,
+.title-right input[data-tooltip]:hover::after {
     content: attr(data-tooltip); /* Display the tooltip text from data-tooltip */
     position: absolute;
     bottom: 100%; /* Place tooltip above the button */
@@ -71,7 +73,7 @@ body {
 }
 
 /* Add relative position to the button for tooltip positioning */
-.toolbar button, .toolbar select, .toolbar input {
+.title-right button, .title-right select, .title-right input {
     position: relative; /* Necessary for absolute positioning of the tooltip */
 }
 
