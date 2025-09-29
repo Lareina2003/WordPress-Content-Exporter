@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WordPad-like Editor</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+</head>
+<body>
+
+    <div class="editor-container">
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <button id="boldBtn" class="toolbar-btn" data-tooltip="Bold"><i class="fas fa-bold"></i></button>
+            <button id="italicBtn" class="toolbar-btn" data-tooltip="Italic"><i class="fas fa-italic"></i></button>
+            <button id="underlineBtn" class="toolbar-btn" data-tooltip="Underline"><i class="fas fa-underline"></i></button>
+            <button id="h1Btn" class="toolbar-btn" data-tooltip="H1">H1</button>
+            <button id="h2Btn" class="toolbar-btn" data-tooltip="H2">H2</button>
+            <select id="fontSize" class="toolbar-select" data-tooltip="Font Size">
+                <option value="16px">16px</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px</option>
+            </select>
+            <select id="fontStyle" class="toolbar-select" data-tooltip="Font Style">
+                <option value="Arial">Arial</option>
+                <option value="Courier New">Courier New</option>
+            </select>
+            <button id="leftAlignBtn" class="toolbar-btn" data-tooltip="Left Align"><i class="fas fa-align-left"></i></button>
+            <button id="centerAlignBtn" class="toolbar-btn" data-tooltip="Center Align"><i class="fas fa-align-center"></i></button>
+            <button id="rightAlignBtn" class="toolbar-btn" data-tooltip="Right Align"><i class="fas fa-align-right"></i></button>
+            <button id="justifyAlignBtn" class="toolbar-btn" data-tooltip="Justify Align"><i class="fas fa-align-justify"></i></button>
+            <input type="color" id="textColor" class="toolbar-input" title="Font Color" />
+            <input type="color" id="highlightColor" class="toolbar-input" title="Highlight Color" />
+            <button id="orderedListBtn" class="toolbar-btn" data-tooltip="Ordered List"><i class="fas fa-list-ol"></i></button>
+            <button id="unorderedListBtn" class="toolbar-btn" data-tooltip="Unordered List"><i class="fas fa-list-ul"></i></button>
+            <button id="insertLinkBtn" class="toolbar-btn" data-tooltip="Insert Link"><i class="fas fa-link"></i></button>
+            <button id="insertImageBtn" class="toolbar-btn" data-tooltip="Insert Image"><i class="fas fa-image"></i></button>
+            <button id="insertTableBtn" class="toolbar-btn" data-tooltip="Insert Table"><i class="fas fa-table"></i></button>
+            <button id="clearFormattingBtn" class="toolbar-btn" data-tooltip="Clear Formatting"><i class="fas fa-eraser"></i></button>
+            <button id="resetBtn" class="toolbar-btn" data-tooltip="Reset">Reset</button>
+            <button id="copyTextBtn" class="toolbar-btn" data-tooltip="Copy as Plain Text">Copy</button>
+            <button id="previewBtn" class="toolbar-btn" data-tooltip="Preview">Preview</button>
+            <button id="exportDocBtn" class="toolbar-btn" data-tooltip="Export as DOC">Export DOC</button>
+           
+        </div>
+
+        <!-- Editor Area -->
+        <div class="editor" contenteditable="true" id="editor">
+            <p>Start typing here...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+</body>
+</html>

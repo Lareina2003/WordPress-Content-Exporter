@@ -1,0 +1,90 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.editor-container {
+    width: 80%;
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Toolbar styles */
+.toolbar {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.toolbar button, .toolbar select, .toolbar input {
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    border: none;
+    transition: background-color 0.2s ease;
+}
+
+.toolbar button:hover, .toolbar select:hover, .toolbar input:hover {
+    background-color: #e0e0e0;
+}
+
+.editor {
+    min-height: 400px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    font-size: 16px;
+    line-height: 1.6;
+    background-color: #fafafa;
+}
+
+/* Tooltip styling */
+button[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s;
+}
+
+button:focus, select:focus, input:focus {
+    outline: none;
+}
+
+button {
+    border: none;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: #e0e0e0;
+}
+
+/* Styling for the selected button */
+button.selected {
+    background-color: #ddd;
+}
