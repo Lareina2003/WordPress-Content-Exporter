@@ -106,6 +106,8 @@ class Toolbar {
         this.copiedFormatHTML = null;
         this.editor.editor.addEventListener('mouseup', () => this.handleEditorClick());
 
+        this.darkModeToggle = document.getElementById('darkModeToggle');
+
     }
 
     init() {
@@ -134,7 +136,25 @@ class Toolbar {
 
         this.formatPainterBtn.addEventListener('click', () => this.toggleFormatPainter());
         document.getElementById('editor').addEventListener('mouseup', (e) => this.applyFormatPainter(e));
+
+        this.darkModeToggle.addEventListener('click', () => this.toggleDarkMode());
+
+    // Check saved preference on load
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.body.classList.add('dark-mode');
     }
+    }
+
+     toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+
+    // Optional: change icon
+    this.darkModeToggle.innerHTML = isDark
+      ? '<i class="fas fa-sun"></i>'
+      : '<i class="fas fa-moon"></i>';
+  }
 
     toggleFormatPainter() {
     if (this.isFormatPainterActive) {
