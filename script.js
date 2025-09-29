@@ -1,6 +1,10 @@
 class Editor {
     constructor() {
         this.editor = document.getElementById('editor');
+        this.storageKey = 'wordpad-autosave-content';
+        this.loadAutosave();
+        this.startAutosave(5000);
+
     }
 
     
@@ -10,6 +14,32 @@ class Editor {
         } else {
             document.execCommand(command, false, null); // For commands like bold, italic, etc.
         }
+    }
+    autosave() {
+        const content = this.editor.innerHTML;
+        localStorage.setItem(this.storageKey, content);
+        console.log('Autosaved at ' + new Date().toLocaleTimeString());
+    }
+
+    // Load saved content if exists
+    loadAutosave() {
+        const savedContent = localStorage.getItem(this.storageKey);
+        if (savedContent) {
+            this.editor.innerHTML = savedContent;
+            console.log('Loaded autosaved content');
+        }
+    }
+
+    // Start periodic autosave every interval milliseconds
+    startAutosave(interval = 5000) {
+        this.autosaveInterval = setInterval(() => {
+            this.autosave();
+        }, interval);
+    }
+
+    // Optionally stop autosave
+    stopAutosave() {
+        clearInterval(this.autosaveInterval);
     }
 
     // Method to insert an image into the editor
